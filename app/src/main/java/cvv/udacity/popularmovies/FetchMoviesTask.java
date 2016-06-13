@@ -27,10 +27,6 @@ import java.util.List;
  */
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     private final String TAG = FetchMoviesTask.class.getSimpleName();
-    private static final String APP_KEY = "";
-    private static final String API_BASE_URL = "http://api.themoviedb.org/3/movie/%s?api_key=%s";
-    private static final String PATH_TOP_RATED = "top_rated";
-    private static final String PATH_POPULAR = "popular";
     private Context mContext;
     private OnMovieFetchListener mOnMovieFetchListener;
 
@@ -62,8 +58,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         String movieJsonStr = null;
 
         try {
-            String path = sortOrderPopular ? PATH_POPULAR : PATH_TOP_RATED;
-            URL url = new URL(String.format(API_BASE_URL, path, APP_KEY));
+            String path = sortOrderPopular ? ApiHelper.PATH_POPULAR : ApiHelper.PATH_TOP_RATED;
+            URL url = new URL(String.format(ApiHelper.API_BASE_URL, path, ApiHelper.APP_KEY));
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
 
@@ -93,6 +89,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             }
 
             movieJsonStr = builder.toString();
+            Log.d(TAG, "fetchMovies: " + movieJsonStr);
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "doInBackground: ", e);
@@ -124,7 +121,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         if (TextUtils.isEmpty(json)) {
             return null;
         }
-        final String MOVIE_LIST_KEY = "result";
+        final String MOVIE_LIST_KEY = "results";
         List<Movie> movies = new ArrayList<>();
         JSONObject responseJson = new JSONObject(json);
         JSONArray jsonArray = responseJson.getJSONArray(MOVIE_LIST_KEY);

@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cvv.udacity.popularmovies.ApiHelper.IMAGE_URL_PLACEHOLDERS;
+
 /**
  * Created by Caro Vaquero
  * Date: 12.06.2016
@@ -19,8 +21,6 @@ import java.util.List;
  */
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
-
-    private static final String IMAGE_URL_PLACEHOLDERS = "http://image.tmdb.org/t/p/w185/%s";
 
     private Context mContext;
     private List<Movie> mMovies = new ArrayList<>();
@@ -61,7 +61,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Movie movie = mMovies.get(position);
 
         Picasso.with(mContext)
-                .load(String.format(IMAGE_URL_PLACEHOLDERS, movie.getId()))
+                .load(String.format(ApiHelper.IMAGE_URL_PLACEHOLDERS, movie.getPosterPath()))
                 .into(holder.mImageView);
     }
 
