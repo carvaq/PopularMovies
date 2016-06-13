@@ -12,8 +12,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cvv.udacity.popularmovies.ApiHelper.IMAGE_URL_PLACEHOLDERS;
-
 /**
  * Created by Caro Vaquero
  * Date: 12.06.2016
@@ -40,7 +38,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.image);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,5 +74,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public void setMovies(List<Movie> movies) {
         mMovies = movies;
+        notifyDataSetChanged();
     }
 }
