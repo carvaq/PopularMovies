@@ -1,6 +1,5 @@
 package cvv.udacity.popularmovies;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -30,7 +29,7 @@ public class MovieGridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_movies_grid, container, false);
-        mMovieAdapter = new MovieAdapter(getActivity(), mOnMovieClickListener);
+        mMovieAdapter = new MovieAdapter(getActivity());
         mMovieAdapter.setHasStableIds(true);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
@@ -53,19 +52,6 @@ public class MovieGridFragment extends Fragment {
         public void onMoviesFetched(List<Movie> movies) {
             if (movies != null) {
                 mMovieAdapter.setMovies(movies);
-            }
-        }
-    };
-
-    private OnMovieClickListener mOnMovieClickListener = new OnMovieClickListener() {
-        @Override
-        public void onMovieClicked(Movie movie) {
-            if (UiHelper.isXLargeTablet(getActivity())) {
-
-            } else {
-                Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(DetailActivity.MOVIE_EXTRA, movie);
-                startActivity(intent);
             }
         }
     };

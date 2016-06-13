@@ -8,17 +8,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-public class MovieFragment extends Fragment {
-
+public class DetailFragment extends Fragment {
+    private TextView synopsis;
+    private TextView title;
+    private TextView releaseYear;
+    private TextView voteAverage;
+    private TextView duration;
 
     private Movie mMovie;
 
 
-    public MovieFragment() {
+    public DetailFragment() {
     }
 
-    public static MovieFragment newInstance(Movie param1) {
-        MovieFragment fragment = new MovieFragment();
+    public static DetailFragment newInstance(Movie param1) {
+        DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(DetailActivity.MOVIE_EXTRA, param1);
         fragment.setArguments(args);
@@ -31,6 +35,9 @@ public class MovieFragment extends Fragment {
         if (getArguments() != null) {
             mMovie = getArguments().getParcelable(DetailActivity.MOVIE_EXTRA);
         }
+        if (savedInstanceState != null) {
+            mMovie = savedInstanceState.getParcelable(DetailActivity.MOVIE_EXTRA);
+        }
     }
 
     @Override
@@ -38,19 +45,33 @@ public class MovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_movie, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        TextView synopsis = (TextView) view.findViewById(R.id.synopsis);
-        TextView title = (TextView) view.findViewById(R.id.title);
-        TextView releaseYear = (TextView) view.findViewById(R.id.release_year);
-        TextView voteAverage = (TextView) view.findViewById(R.id.vote_average);
-        TextView duration = (TextView) view.findViewById(R.id.duration);
+        synopsis = (TextView) view.findViewById(R.id.synopsis);
+        title = (TextView) view.findViewById(R.id.title);
+        releaseYear = (TextView) view.findViewById(R.id.release_year);
+        voteAverage = (TextView) view.findViewById(R.id.vote_average);
+        duration = (TextView) view.findViewById(R.id.duration);
 
+        if (mMovie != null) {
+            setMovieValue();
+        }
+        return view;
+    }
+
+    public void updateMovie(Movie movie) {
+        this.mMovie = movie;
+
+        if (mMovie != null) {
+            setMovieValue();
+        }
+    }
+
+    private void setMovieValue() {
         synopsis.setText(mMovie.getSynopsis());
         title.setText(mMovie.getOriginalTitle());
         voteAverage.setText(getString(R.string.detail_vote_average, mMovie.getVoteAverage()));
         releaseYear.setText(mMovie.getReleaseDate().substring(0, 4)); //This would be cleaner with SimpleDateFormat
-        return view;
     }
 
 

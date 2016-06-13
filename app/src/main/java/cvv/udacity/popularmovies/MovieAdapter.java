@@ -25,10 +25,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private LayoutInflater mLayoutInflater;
     private OnMovieClickListener mOnMovieClickListener;
 
-    public MovieAdapter(Context context, OnMovieClickListener movieClickListener) {
+    public MovieAdapter(Context context) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
-        mOnMovieClickListener = movieClickListener;
+        mOnMovieClickListener = (OnMovieClickListener) context;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
