@@ -1,11 +1,11 @@
 package cvv.udacity.popularmovies;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Serializable;
 
 import static android.content.ContentValues.TAG;
 
@@ -15,7 +15,7 @@ import static android.content.ContentValues.TAG;
  * Project: PopularMovies
  */
 
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
     private static final transient String ID = "id";
     private static final transient String ORIGINAL_TITLE = "original_title";
     private static final transient String TITLE = "title";
@@ -46,6 +46,27 @@ public class Movie implements Serializable {
             Log.e(TAG, "Movie: Could not parse json");
         }
     }
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        originalTitle = in.readString();
+        posterPath = in.readString();
+        description = in.readString();
+        voteAverage = in.readDouble();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -124,5 +145,20 @@ public class Movie implements Serializable {
         int result = id.hashCode();
         result = 31 * result + (originalTitle != null ? originalTitle.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(originalTitle);
+        dest.writeString(posterPath);
+        dest.writeString(description);
+        dest.writeDouble(voteAverage);
     }
 }
