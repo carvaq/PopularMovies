@@ -16,50 +16,6 @@ import static android.content.ContentValues.TAG;
  */
 
 public class Movie implements Parcelable {
-    private static final transient String ID = "id";
-    private static final transient String ORIGINAL_TITLE = "original_title";
-    private static final transient String TITLE = "title";
-    private static final transient String POSTER_PATH = "poster_path";
-    private static final transient String VOTE_AVERAGE = "vote_average";
-    private static final transient String OVERVIEW = "overview";
-    private static final transient String RELEASE_DATE = "release_date";
-
-
-    private Integer id;
-    private String title;
-    private String originalTitle;
-    private String posterPath;
-    private String synopsis;
-    private String releaseDate;
-    private Double voteAverage;
-
-    public Movie() {
-    }
-
-    public Movie(JSONObject jsonObject) {
-        try {
-            id = jsonObject.getInt(ID);
-            title = jsonObject.getString(TITLE);
-            originalTitle = jsonObject.getString(ORIGINAL_TITLE);
-            posterPath = jsonObject.getString(POSTER_PATH);
-            synopsis = jsonObject.getString(OVERVIEW);
-            voteAverage = jsonObject.getDouble(VOTE_AVERAGE);
-            releaseDate = jsonObject.getString(RELEASE_DATE);
-        } catch (JSONException e) {
-            Log.e(TAG, "Movie: Could not parse json");
-        }
-    }
-
-    protected Movie(Parcel in) {
-        id = in.readInt();
-        title = in.readString();
-        originalTitle = in.readString();
-        posterPath = in.readString();
-        synopsis = in.readString();
-        voteAverage = in.readDouble();
-        releaseDate = in.readString();
-    }
-
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
@@ -71,72 +27,114 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+    private static final transient String ID = "mId";
+    private static final transient String ORIGINAL_TITLE = "original_title";
+    private static final transient String TITLE = "mTitle";
+    private static final transient String POSTER_PATH = "poster_path";
+    private static final transient String VOTE_AVERAGE = "vote_average";
+    private static final transient String OVERVIEW = "overview";
+    private static final transient String RELEASE_DATE = "release_date";
+    private Integer mId;
+    private String mTitle;
+    private String mOriginalTitle;
+    private String mPosterPath;
+    private String mSynopsis;
+    private String mReleaseDate;
+    private Double mVoteAverage;
+
+    public Movie() {
+    }
+
+    public Movie(JSONObject jsonObject) {
+        try {
+            mId = jsonObject.getInt(ID);
+            mTitle = jsonObject.getString(TITLE);
+            mOriginalTitle = jsonObject.getString(ORIGINAL_TITLE);
+            mPosterPath = jsonObject.getString(POSTER_PATH);
+            mSynopsis = jsonObject.getString(OVERVIEW);
+            mVoteAverage = jsonObject.getDouble(VOTE_AVERAGE);
+            mReleaseDate = jsonObject.getString(RELEASE_DATE);
+        } catch (JSONException e) {
+            Log.e(TAG, "Movie: Could not parse json");
+        }
+    }
+
+    protected Movie(Parcel in) {
+        mId = in.readInt();
+        mTitle = in.readString();
+        mOriginalTitle = in.readString();
+        mPosterPath = in.readString();
+        mSynopsis = in.readString();
+        mVoteAverage = in.readDouble();
+        mReleaseDate = in.readString();
+    }
 
     public Integer getId() {
-        return id;
+        return mId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public String getTitle() {
-        return title;
+        return mTitle;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.mTitle = title;
     }
 
     public String getOriginalTitle() {
-        return originalTitle;
+        return mOriginalTitle;
     }
 
     public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
+        this.mOriginalTitle = originalTitle;
     }
 
     public String getPosterPath() {
-        return posterPath;
+        return mPosterPath;
     }
 
     public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+        this.mPosterPath = posterPath;
     }
 
     public String getSynopsis() {
-        return synopsis;
+        return mSynopsis;
     }
 
     public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
+        this.mSynopsis = synopsis;
     }
 
     public String getReleaseDate() {
-        return releaseDate;
+        return mReleaseDate;
     }
 
     public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+        this.mReleaseDate = releaseDate;
     }
 
     public Double getVoteAverage() {
-        return voteAverage;
+        return mVoteAverage;
     }
 
     public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
+        this.mVoteAverage = voteAverage;
     }
 
     @Override
     public String toString() {
         return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", posterPath='" + posterPath + '\'' +
-                ", synopsis='" + synopsis + '\'' +
-                ", voteAverage=" + voteAverage +
+                "mId=" + mId +
+                ", mTitle='" + mTitle + '\'' +
+                ", mOriginalTitle='" + mOriginalTitle + '\'' +
+                ", mPosterPath='" + mPosterPath + '\'' +
+                ", mSynopsis='" + mSynopsis + '\'' +
+                ", mReleaseDate='" + mReleaseDate + '\'' +
+                ", mVoteAverage=" + mVoteAverage +
                 '}';
     }
 
@@ -147,15 +145,15 @@ public class Movie implements Parcelable {
 
         Movie movie = (Movie) o;
 
-        if (!id.equals(movie.id)) return false;
-        return originalTitle != null ? originalTitle.equals(movie.originalTitle) : movie.originalTitle == null;
+        return mId.equals(movie.mId) && (mOriginalTitle != null ?
+                mOriginalTitle.equals(movie.mOriginalTitle) : movie.mOriginalTitle == null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + (originalTitle != null ? originalTitle.hashCode() : 0);
+        int result = mId.hashCode();
+        result = 31 * result + (mOriginalTitle != null ? mOriginalTitle.hashCode() : 0);
         return result;
     }
 
@@ -166,12 +164,12 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(title);
-        dest.writeString(originalTitle);
-        dest.writeString(posterPath);
-        dest.writeString(synopsis);
-        dest.writeDouble(voteAverage);
-        dest.writeString(releaseDate);
+        dest.writeInt(mId);
+        dest.writeString(mTitle);
+        dest.writeString(mOriginalTitle);
+        dest.writeString(mPosterPath);
+        dest.writeString(mSynopsis);
+        dest.writeDouble(mVoteAverage);
+        dest.writeString(mReleaseDate);
     }
 }
