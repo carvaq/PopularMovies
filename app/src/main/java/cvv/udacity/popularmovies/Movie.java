@@ -22,13 +22,15 @@ public class Movie implements Parcelable {
     private static final transient String POSTER_PATH = "poster_path";
     private static final transient String VOTE_AVERAGE = "vote_average";
     private static final transient String OVERVIEW = "overview";
+    private static final transient String RELEASE_DATE = "release_date";
 
 
     private Integer id;
     private String title;
     private String originalTitle;
     private String posterPath;
-    private String description;
+    private String synopsis;
+    private String releaseDate;
     private Double voteAverage;
 
     public Movie() {
@@ -40,8 +42,9 @@ public class Movie implements Parcelable {
             title = jsonObject.getString(TITLE);
             originalTitle = jsonObject.getString(ORIGINAL_TITLE);
             posterPath = jsonObject.getString(POSTER_PATH);
-            description = jsonObject.getString(OVERVIEW);
+            synopsis = jsonObject.getString(OVERVIEW);
             voteAverage = jsonObject.getDouble(VOTE_AVERAGE);
+            releaseDate = jsonObject.getString(RELEASE_DATE);
         } catch (JSONException e) {
             Log.e(TAG, "Movie: Could not parse json");
         }
@@ -52,8 +55,9 @@ public class Movie implements Parcelable {
         title = in.readString();
         originalTitle = in.readString();
         posterPath = in.readString();
-        description = in.readString();
+        synopsis = in.readString();
         voteAverage = in.readDouble();
+        releaseDate = in.readString();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -100,12 +104,20 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSynopsis() {
+        return synopsis;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public Double getVoteAverage() {
@@ -123,7 +135,7 @@ public class Movie implements Parcelable {
                 ", title='" + title + '\'' +
                 ", originalTitle='" + originalTitle + '\'' +
                 ", posterPath='" + posterPath + '\'' +
-                ", description='" + description + '\'' +
+                ", synopsis='" + synopsis + '\'' +
                 ", voteAverage=" + voteAverage +
                 '}';
     }
@@ -158,7 +170,8 @@ public class Movie implements Parcelable {
         dest.writeString(title);
         dest.writeString(originalTitle);
         dest.writeString(posterPath);
-        dest.writeString(description);
+        dest.writeString(synopsis);
         dest.writeDouble(voteAverage);
+        dest.writeString(releaseDate);
     }
 }
