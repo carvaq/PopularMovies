@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
 
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
         setContentView(R.layout.activity_main);
 
         if (UiHelper.isXLargeTablet(this)) {
+            View container = findViewById(R.id.detail_container);
+            container.setVisibility(View.VISIBLE);
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.grid_container, new MovieGridFragment())
                     .add(R.id.detail_container, new DetailFragment(), DETAIL_TAG)
