@@ -9,6 +9,6 @@
     <dimen name="margin_16">16dp</dimen>
     <dimen name="margin_32">32dp</dimen>
 
-    <integer name="number_of_columns">2</integer>
+    <integer name="number_of_columns">4</integer>
 
 </resources>

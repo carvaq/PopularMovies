@@ -27,9 +27,9 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
-    private static final transient String ID = "mId";
+    private static final transient String ID = "id";
     private static final transient String ORIGINAL_TITLE = "original_title";
-    private static final transient String TITLE = "mTitle";
+    private static final transient String TITLE = "title";
     private static final transient String POSTER_PATH = "poster_path";
     private static final transient String VOTE_AVERAGE = "vote_average";
     private static final transient String OVERVIEW = "overview";

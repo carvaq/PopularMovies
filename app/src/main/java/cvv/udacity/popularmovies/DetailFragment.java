@@ -5,15 +5,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 
 public class DetailFragment extends Fragment {
-    private TextView synopsis;
-    private TextView title;
-    private TextView releaseYear;
-    private TextView voteAverage;
-    private TextView duration;
+    private TextView mSynopsis;
+    private TextView mTitle;
+    private TextView mReleaseYear;
+    private TextView mVoteAverage;
+    private TextView mDuration;
+    private ImageView mPoster;
 
     private Movie mMovie;
 
@@ -47,11 +51,12 @@ public class DetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        synopsis = (TextView) view.findViewById(R.id.synopsis);
-        title = (TextView) view.findViewById(R.id.title);
-        releaseYear = (TextView) view.findViewById(R.id.release_year);
-        voteAverage = (TextView) view.findViewById(R.id.vote_average);
-        duration = (TextView) view.findViewById(R.id.duration);
+        mSynopsis = (TextView) view.findViewById(R.id.synopsis);
+        mTitle = (TextView) view.findViewById(R.id.title);
+        mReleaseYear = (TextView) view.findViewById(R.id.release_year);
+        mVoteAverage = (TextView) view.findViewById(R.id.vote_average);
+        mDuration = (TextView) view.findViewById(R.id.duration);
+        mPoster = (ImageView) view.findViewById(R.id.poster);
 
         if (mMovie != null) {
             setMovieValue();
@@ -68,10 +73,13 @@ public class DetailFragment extends Fragment {
     }
 
     private void setMovieValue() {
-        synopsis.setText(mMovie.getSynopsis());
-        title.setText(mMovie.getOriginalTitle());
-        voteAverage.setText(getString(R.string.detail_vote_average, mMovie.getVoteAverage()));
-        releaseYear.setText(mMovie.getReleaseDate().substring(0, 4)); //This would be cleaner with SimpleDateFormat
+        mSynopsis.setText(mMovie.getSynopsis());
+        mTitle.setText(mMovie.getOriginalTitle());
+        mVoteAverage.setText(getString(R.string.detail_vote_average, mMovie.getVoteAverage()));
+        mReleaseYear.setText(mMovie.getReleaseDate().substring(0, 4)); //This would be cleaner with SimpleDateFormat
+        Picasso.with(getActivity())
+                .load(String.format(ApiHelper.IMAGE_URL_WITH_PLACEHOLDERS, mMovie.getPosterPath()))
+                .into(mPoster);
     }
 
 

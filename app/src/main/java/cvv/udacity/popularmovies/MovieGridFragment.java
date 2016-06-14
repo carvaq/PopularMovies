@@ -31,7 +31,7 @@ public class MovieGridFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movies_grid, container, false);
         mMovieAdapter = new MovieAdapter(getActivity());
         mMovieAdapter.setHasStableIds(true);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
