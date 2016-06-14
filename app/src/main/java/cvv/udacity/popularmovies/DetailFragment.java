@@ -16,7 +16,6 @@ public class DetailFragment extends Fragment {
     private TextView mTitle;
     private TextView mReleaseYear;
     private TextView mVoteAverage;
-    private TextView mDuration;
     private ImageView mPoster;
 
     private Movie mMovie;
@@ -55,7 +54,6 @@ public class DetailFragment extends Fragment {
         mTitle = (TextView) view.findViewById(R.id.title);
         mReleaseYear = (TextView) view.findViewById(R.id.release_year);
         mVoteAverage = (TextView) view.findViewById(R.id.vote_average);
-        mDuration = (TextView) view.findViewById(R.id.duration);
         mPoster = (ImageView) view.findViewById(R.id.poster);
 
         if (mMovie != null) {
