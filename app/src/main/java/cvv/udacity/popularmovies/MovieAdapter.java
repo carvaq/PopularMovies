@@ -31,6 +31,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         mOnMovieClickListener = (OnMovieClickListener) context;
     }
 
+    public void addMovie(Movie movie) {
+        mMovies.add(movie);
+        notifyItemInserted(mMovies.size() - 1);
+    }
+
     protected class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mImageView;

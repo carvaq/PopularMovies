@@ -9,8 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import java.util.List;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Caro Vaquero
@@ -38,22 +42,30 @@ public class MovieGridFragment extends Fragment {
         recyclerView.setLayoutManager(mGridLayoutManager);
         recyclerView.setAdapter(mMovieAdapter);
 
-
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(getActivity(), mOnMovieFetchListener);
-        fetchMoviesTask.execute(PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getString(getString(R.string.pref_sorting_key), getString(R.string.pref_sorting_popular)));
+        startFetch();
 
         return rootView;
     }
 
+    private void startFetch() {
+        //http://blog.feedpresso.com/2016/01/25/why-you-should-use-rxjava-in-android-a-short-introduction-to-rxjava.html
+        String orderPref = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_sorting_key), getString(R.string.pref_sorting_popular));
 
-    private OnMovieFetchListener mOnMovieFetchListener = new OnMovieFetchListener() {
-        @Override
-        public void onMoviesFetched(List<Movie> movies) {
-            if (movies != null) {
-                mMovieAdapter.setMovies(movies);
-            }
-        }
-    };
+        Observable.from(FetchMoviesTask.fetchMovies(getString(R.string.pref_sorting_popular).equals(orderPref)))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Movie>() {
+                    @Override
+                    public void call(Movie movie) {
+                        mMovieAdapter.addMovie(movie);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(getActivity(), R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
 
 }

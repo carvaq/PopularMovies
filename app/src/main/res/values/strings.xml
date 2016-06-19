@@ -12,5 +12,6 @@
 
     <string name="detail_vote_average">%.1g/10</string>
     <string name="detail_duration">%s min</string>
+    <string name="error_something_went_wrong">Sorry, something went wrong while getting the movie list.</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package cvv.udacity.popularmovies;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,34 +25,11 @@ import java.util.List;
  * Date: 12.06.2016
  * Project: PopularMovies
  */
-public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
-    private final String TAG = FetchMoviesTask.class.getSimpleName();
-    private Context mContext;
-    private OnMovieFetchListener mOnMovieFetchListener;
+public class FetchMoviesTask {
+    private static final String TAG = FetchMoviesTask.class.getSimpleName();
 
-    public FetchMoviesTask(Context context, OnMovieFetchListener onMovieFetchListener) {
-        mContext = context;
-        mOnMovieFetchListener = onMovieFetchListener;
-    }
-
-    @Nullable
-    @Override
-    protected List<Movie> doInBackground(String... params) {
-        if (params != null) {
-            return fetchMovies(mContext.getString(R.string.pref_sorting_popular).equals(params[0]));
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    protected void onPostExecute(List<Movie> movies) {
-        super.onPostExecute(movies);
-        mOnMovieFetchListener.onMoviesFetched(movies);
-    }
-
-    @Nullable
-    private List<Movie> fetchMovies(boolean sortOrderPopular) {
+    @NonNull
+    public static List<Movie> fetchMovies(boolean sortOrderPopular) {
         BufferedReader reader = null;
         HttpURLConnection urlConnection = null;
         String movieJsonStr = null;
@@ -69,13 +46,13 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             int responseCode = urlConnection.getResponseCode();
             if (urlConnection.getResponseCode() >= 300 || responseCode < 200) {
                 Log.e(TAG, "Request was unsuccessful. Error " + responseCode);
-                return null;
+                return Collections.emptyList();
             }
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuilder builder = new StringBuilder();
             if (inputStream == null) {
-                return null;
+                return Collections.emptyList();
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -85,7 +62,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             }
 
             if (builder.length() == 0) {
-                return null;
+                return Collections.emptyList();
             }
 
             movieJsonStr = builder.toString();
@@ -117,7 +94,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     }
 
     @Nullable
-    private List<Movie> parseMoviesJson(String json) throws JSONException {
+    private static List<Movie> parseMoviesJson(String json) throws JSONException {
         if (TextUtils.isEmpty(json)) {
             return null;
         }
