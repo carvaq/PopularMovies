@@ -6,14 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -48,22 +49,35 @@ public class MovieGridFragment extends Fragment {
     }
 
     private void startFetch() {
-        //http://blog.feedpresso.com/2016/01/25/why-you-should-use-rxjava-in-android-a-short-introduction-to-rxjava.html
+        //https://kmangutov.wordpress.com/2015/03/28/android-mvp-consuming-restful-apis/
         String orderPref = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(getString(R.string.pref_sorting_key), getString(R.string.pref_sorting_popular));
 
-        Observable.from(FetchMoviesTask.fetchMovies(getString(R.string.pref_sorting_popular).equals(orderPref)))
-                .subscribeOn(Schedulers.io())
+        ApiService apiService = new ApiService();
+
+        Observable<MovieFetch> observable;
+        if (getString(R.string.pref_sorting_popular).equals(orderPref)) {
+            observable = apiService.getApi().getPopular(ApiService.APP_KEY);
+        } else {
+            observable = apiService.getApi().getTopRated(ApiService.APP_KEY);
+        }
+
+        observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Movie>() {
+                .subscribe(new Observer<MovieFetch>() {
                     @Override
-                    public void call(Movie movie) {
-                        mMovieAdapter.addMovie(movie);
+                    public void onCompleted() {
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onError(Throwable e) {
                         Toast.makeText(getActivity(), R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
+                        Log.e(getTag(), "",e);
+                    }
+
+                    @Override
+                    public void onNext(MovieFetch movieFetch) {
+                        mMovieAdapter.setMovies(movieFetch.getMovies());
                     }
                 });
     }

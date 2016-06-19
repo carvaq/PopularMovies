@@ -76,7 +76,7 @@ public class DetailFragment extends Fragment {
         mVoteAverage.setText(getString(R.string.detail_vote_average, mMovie.getVoteAverage()));
         mReleaseYear.setText(mMovie.getReleaseDate().substring(0, 4)); //This would be cleaner with SimpleDateFormat
         Picasso.with(getActivity())
-                .load(String.format(ApiHelper.IMAGE_URL_WITH_PLACEHOLDERS, mMovie.getPosterPath()))
+                .load(String.format(ApiService.IMAGE_URL_WITH_PLACEHOLDERS, mMovie.getPosterPath()))
                 .into(mPoster);
     }
 

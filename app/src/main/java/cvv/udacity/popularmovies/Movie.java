@@ -2,12 +2,8 @@ package cvv.udacity.popularmovies;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import static android.content.ContentValues.TAG;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Caro Vaquero
@@ -27,36 +23,23 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
-    private static final transient String ID = "id";
-    private static final transient String ORIGINAL_TITLE = "original_title";
-    private static final transient String TITLE = "title";
-    private static final transient String POSTER_PATH = "poster_path";
-    private static final transient String VOTE_AVERAGE = "vote_average";
-    private static final transient String OVERVIEW = "overview";
-    private static final transient String RELEASE_DATE = "release_date";
+
+    @SerializedName("id")
     private Integer mId;
+    @SerializedName("title")
     private String mTitle;
+    @SerializedName("original_title")
     private String mOriginalTitle;
+    @SerializedName("poster_path")
     private String mPosterPath;
+    @SerializedName("overview")
     private String mSynopsis;
+    @SerializedName("release_date")
     private String mReleaseDate;
+    @SerializedName("vote_average")
     private Double mVoteAverage;
 
     public Movie() {
-    }
-
-    public Movie(JSONObject jsonObject) {
-        try {
-            mId = jsonObject.getInt(ID);
-            mTitle = jsonObject.getString(TITLE);
-            mOriginalTitle = jsonObject.getString(ORIGINAL_TITLE);
-            mPosterPath = jsonObject.getString(POSTER_PATH);
-            mSynopsis = jsonObject.getString(OVERVIEW);
-            mVoteAverage = jsonObject.getDouble(VOTE_AVERAGE);
-            mReleaseDate = jsonObject.getString(RELEASE_DATE);
-        } catch (JSONException e) {
-            Log.e(TAG, "Movie: Could not parse json");
-        }
     }
 
     protected Movie(Parcel in) {
