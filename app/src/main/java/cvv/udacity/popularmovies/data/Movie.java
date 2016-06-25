@@ -1,4 +1,4 @@
-package cvv.udacity.popularmovies;
+package cvv.udacity.popularmovies.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

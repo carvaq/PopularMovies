@@ -12,6 +12,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.data.Movie;
+
 /**
  * Created by Caro Vaquero
  * Date: 12.06.2016
@@ -38,11 +42,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageView;
+        @BindView(R.id.image)
+        ImageView mImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.image);
+            ButterKnife.bind(this, itemView);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

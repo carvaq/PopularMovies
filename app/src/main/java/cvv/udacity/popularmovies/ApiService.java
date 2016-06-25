@@ -1,5 +1,8 @@
 package cvv.udacity.popularmovies;
 
+import cvv.udacity.popularmovies.data.MovieFetch;
+import cvv.udacity.popularmovies.data.ReviewFetch;
+import cvv.udacity.popularmovies.data.VideoFetch;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,11 +55,11 @@ public class ApiService {
 
         @Headers("Accept:application/json")
         @GET("{id}/videos")
-        Observable<MovieFetch> getVideosForMoview(@Path("id") long id,@Query("api_key") String appKey);
+        Observable<VideoFetch> getVideosForMovie(@Path("id") long id, @Query("api_key") String appKey);
 
         @Headers("Accept:application/json")
         @GET("{id}/reviews")
-        Observable<MovieFetch> getReviewsForMoview(@Path("id") long id,@Query("api_key") String appKey);
+        Observable<ReviewFetch> getReviewsForMovie(@Path("id") long id, @Query("api_key") String appKey);
 
 
     }

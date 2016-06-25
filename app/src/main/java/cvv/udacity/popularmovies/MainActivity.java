@@ -9,6 +9,7 @@ import android.view.View;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.data.Movie;
 
 public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
 

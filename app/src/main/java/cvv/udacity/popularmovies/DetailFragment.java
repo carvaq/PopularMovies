@@ -10,13 +10,22 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.data.Movie;
+
 
 public class DetailFragment extends Fragment {
-    private TextView mSynopsis;
-    private TextView mTitle;
-    private TextView mReleaseYear;
-    private TextView mVoteAverage;
-    private ImageView mPoster;
+    @BindView(R.id.synopsis)
+    TextView mSynopsis;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.release_year)
+    TextView mReleaseYear;
+    @BindView(R.id.vote_average)
+    TextView mVoteAverage;
+    @BindView(R.id.poster)
+    ImageView mPoster;
 
     private Movie mMovie;
 
@@ -50,11 +59,7 @@ public class DetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        mSynopsis = (TextView) view.findViewById(R.id.synopsis);
-        mTitle = (TextView) view.findViewById(R.id.title);
-        mReleaseYear = (TextView) view.findViewById(R.id.release_year);
-        mVoteAverage = (TextView) view.findViewById(R.id.vote_average);
-        mPoster = (ImageView) view.findViewById(R.id.poster);
+        ButterKnife.bind(this, view);
 
         if (mMovie != null) {
             setMovieValue();

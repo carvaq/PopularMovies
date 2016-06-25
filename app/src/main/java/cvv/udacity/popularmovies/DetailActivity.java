@@ -3,6 +3,8 @@ package cvv.udacity.popularmovies;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import cvv.udacity.popularmovies.data.Movie;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String MOVIE_EXTRA = "movie_extra";

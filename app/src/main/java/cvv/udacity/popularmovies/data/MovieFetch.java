@@ -1,4 +1,4 @@
-package cvv.udacity.popularmovies;
+package cvv.udacity.popularmovies.data;
 
 import com.google.gson.annotations.SerializedName;
 

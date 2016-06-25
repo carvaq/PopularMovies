@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.data.MovieFetch;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,6 +26,10 @@ import rx.schedulers.Schedulers;
  * Project: PopularMovies
  */
 public class MovieGridFragment extends Fragment {
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
     private MovieAdapter mMovieAdapter;
     private GridLayoutManager mGridLayoutManager;
 
@@ -34,14 +41,17 @@ public class MovieGridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_movies_grid, container, false);
+
+        ButterKnife.bind(this, rootView);
+
         mMovieAdapter = new MovieAdapter(getActivity());
         mMovieAdapter.setHasStableIds(true);
         mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(mGridLayoutManager);
-        recyclerView.setAdapter(mMovieAdapter);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setAdapter(mMovieAdapter);
 
         startFetch();
 
