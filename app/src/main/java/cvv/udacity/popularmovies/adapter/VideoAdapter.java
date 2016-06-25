@@ -27,8 +27,6 @@ import cvv.udacity.popularmovies.data.Video;
  */
 public class VideoAdapter extends BaseAdapter<VideoAdapter.ViewHolder> {
 
-    private static final String YOUTUBE_SITE = "youtube";
-
     private List<Video> mVideoList = new ArrayList<>();
     private OnItemClickListener<Video> mVideoOnItemClickListener;
 
@@ -56,6 +54,7 @@ public class VideoAdapter extends BaseAdapter<VideoAdapter.ViewHolder> {
 
     public void setVideoList(List<Video> videoList) {
         mVideoList = videoList;
+        notifyDataSetChanged();
     }
 
     public void setVideoOnItemClickListener(OnItemClickListener<Video> videoOnItemClickListener) {
@@ -71,9 +70,9 @@ public class VideoAdapter extends BaseAdapter<VideoAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Video video = mVideoList.get(position);
         Picasso.with(mContext).cancelRequest(holder.mPreview);
-        if (YOUTUBE_SITE.equals(video.getSite().toLowerCase())) {
+        if (Video.YOUTUBE_SITE.equals(video.getSite().toLowerCase())) {
             Picasso.with(mContext)
-                    .load(String.format(ApiService.YOUTUBE_PREVIEW_URL_WITH_PLACEHOLDERS, video.getKey()))
+                    .load(String.format(ApiService.YOUTUBE_THUMB_URL_WITH_PLACEHOLDERS, video.getKey()))
                     .into(holder.mPreview);
         }
         holder.mPreview.setContentDescription(video.getSite());

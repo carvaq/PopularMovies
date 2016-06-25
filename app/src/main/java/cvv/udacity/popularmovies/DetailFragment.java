@@ -1,14 +1,19 @@
 package cvv.udacity.popularmovies;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +33,7 @@ import rx.schedulers.Schedulers;
 
 
 public class DetailFragment extends Fragment {
+    private static final String TAG = DetailFragment.class.getSimpleName();
     @BindView(R.id.synopsis)
     TextView mSynopsis;
     @BindView(R.id.title)
@@ -38,15 +44,18 @@ public class DetailFragment extends Fragment {
     TextView mVoteAverage;
     @BindView(R.id.poster)
     ImageView mPoster;
-    @BindView(R.id.recycler_view_reviews)
-    RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.header_videos)
+    View mHeaderVideos;
+    @BindView(R.id.header_reviews)
+    View mHeaderReviews;
+    @BindView(R.id.view_reviews)
+    ViewGroup mReviewsView;
     @BindView(R.id.recycler_view_videos)
     RecyclerView mVideosRecyclerView;
 
     private Movie mMovie;
 
     private VideoAdapter mVideoAdapter;
-    private ReviewAdapter mReviewAdapter;
 
     public DetailFragment() {
     }
@@ -81,6 +90,7 @@ public class DetailFragment extends Fragment {
         if (mMovie != null) {
             setMovieValue();
             prepareRecyclerViews();
+            startVideosAndReviewsFetch();
         }
         return view;
     }
@@ -91,7 +101,20 @@ public class DetailFragment extends Fragment {
         mVideoAdapter.setVideoOnItemClickListener(new OnItemClickListener<Video>() {
             @Override
             public void onItemClicked(Video item) {
-
+                if (Video.YOUTUBE_SITE.equals(item.getSite().toLowerCase())) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = new Uri.Builder().path(ApiService.YOUTUBE_WATCH_URL)
+                                .appendQueryParameter("v", item.getKey())
+                                .build();
+                        intent.setData(uri);
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(getActivity(), R.string.error_video_cannot_open, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.error_video_cannot_open, Toast.LENGTH_LONG).show();
+                }
             }
         });
         mVideosRecyclerView.setHasFixedSize(true);
@@ -103,14 +126,15 @@ public class DetailFragment extends Fragment {
         mReviewAdapter.setReviewOnItemClickListener(new OnItemClickListener<Review>() {
             @Override
             public void onItemClicked(Review item) {
-
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri uri = Uri.parse(item.getUrl());
+                intent.setData(uri);
+                startActivity(intent);
             }
         });
         mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mReviewsRecyclerView.setHasFixedSize(true);
         mReviewsRecyclerView.setAdapter(mReviewAdapter);
-
-        startVideosAndReviewsFetch();
     }
 
 
@@ -125,17 +149,26 @@ public class DetailFragment extends Fragment {
                 .subscribe(new Observer<ReviewFetch>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e(TAG, "onError: Didn't work out as expected", e);
+                        hideReviewsSection();
+                    }
+
+                    private void hideReviewsSection() {
                         mReviewsRecyclerView.setVisibility(View.GONE);
+                        mHeaderReviews.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNext(ReviewFetch reviewFetch) {
-                        mReviewAdapter.setReviews(reviewFetch.getReviews());
+                        if (reviewFetch.getReviews() != null && !reviewFetch.getReviews().isEmpty()) {
+                            mReviewAdapter.setReviews(reviewFetch.getReviews());
+                        } else {
+                            hideReviewsSection();
+                        }
                     }
                 });
 
@@ -152,12 +185,22 @@ public class DetailFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e(TAG, "onError: Didn't work out as expected", e);
+                        hideVideosSection();
+                    }
+
+                    private void hideVideosSection() {
                         mVideosRecyclerView.setVisibility(View.GONE);
+                        mHeaderVideos.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNext(VideoFetch videoFetch) {
-                        mVideoAdapter.setVideoList(videoFetch.getVideos());
+                        if (videoFetch.getVideos() != null && !videoFetch.getVideos().isEmpty()) {
+                            mVideoAdapter.setVideoList(videoFetch.getVideos());
+                        } else {
+                            mReviewsRecyclerView.setVisibility(View.GONE);
+                        }
                     }
                 });
     }

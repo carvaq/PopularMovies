@@ -12,6 +12,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Video {
 
+    public static final String YOUTUBE_SITE = "youtube";
+
+
     @SerializedName("id")
     public String mId;
     @SerializedName("iso_639_1")

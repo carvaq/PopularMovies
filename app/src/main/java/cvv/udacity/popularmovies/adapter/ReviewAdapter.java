@@ -50,6 +50,7 @@ private OnItemClickListener<Review> mReviewOnItemClickListener;
 
     public void setReviews(List<Review> reviews) {
         mReviews = reviews;
+        notifyDataSetChanged();
     }
 
     public void setReviewOnItemClickListener(OnItemClickListener<Review> reviewOnItemClickListener) {
