@@ -10,6 +10,8 @@ import android.widget.TextView;
  * User: Bazlur Rahman Rokon
  * Date: 9/7/13 - 3:33 AM
  */
+
+//http://stackoverflow.com/questions/15627530/android-expandable-textview-with-animation
 public class ExpandableTextView extends TextView {
     private static final int DEFAULT_TRIM_LENGTH = 200;
     private static final String ELLIPSIS = ".....";

@@ -17,5 +17,6 @@
 	<string name="header_reviews">Reviews</string>
 	<string name="error_video_cannot_open">Can not open video</string>
 	<string name="expand_more">MORE</string>
+	<string name="open_in_browser"><u>Open in browser</u></string>
 
 </resources>

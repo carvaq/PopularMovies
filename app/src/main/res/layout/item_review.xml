@@ -1,44 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:padding="@dimen/margin_8">
+              android:orientation="vertical">
 
-	<TextView
-		android:id="@+id/title"
+	<LinearLayout
+		android:id="@+id/title_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textStyle="bold"
-		tools:text="Author"/>
+		android:orientation="horizontal"
+		android:paddingBottom="@dimen/margin_8"
+		android:paddingTop="@dimen/margin_8">
 
-	<TextView
+		<TextView
+			android:id="@+id/title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:textStyle="bold"
+			tools:text="Author"/>
+
+		<TextView
+			android:id="@+id/open_in_browser"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/open_in_browser"
+			android:textColor="#1af"/>
+	</LinearLayout>
+
+	<cvv.udacity.popularmovies.ExpandableTextView
 		android:id="@+id/content"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:visibility="gone"/>
+		app:trimLength="255"
+		tools:text="A nice long text that isn't a lorem inpsum. Yay!"/>
 
-	<com.ms.square.android.expandabletextview.ExpandableTextView
-		android:id="@+id/expand_text_view"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/margin_8">
-
-		<TextView
-			android:id="@+id/expandable_text"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			tools:text="A really nice and big text, that is a good review with a lot of upvotes. Yay!"/>
-
-		<ImageButton
-			android:id="@id/expand_collapse"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="end|bottom"
-			android:padding="16dp"
-			android:text="@string/expand_more"/>
-	</com.ms.square.android.expandabletextview.ExpandableTextView>
 
 </LinearLayout>

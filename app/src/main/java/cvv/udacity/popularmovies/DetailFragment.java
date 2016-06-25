@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -198,15 +197,11 @@ public class DetailFragment extends Fragment {
             View view = layoutInflater.inflate(R.layout.item_review, mReviewsView, false);
             TextView author = (TextView) view.findViewById(R.id.title);
             TextView content = (TextView) view.findViewById(R.id.content);
-            final ExpandableTextView expandableView = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
-            expandableView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                }
-            });
+            TextView openInBrowser = (TextView) view.findViewById(R.id.open_in_browser);
+           // openInBrowser.setText(Html.fromHtml(getString(R.string.open_in_browser)));
             author.setText(review.getAuthor());
-            expandableView.setText(review.getContent());
-            view.setOnClickListener(new View.OnClickListener() {
+            content.setText(review.getContent());
+            view.findViewById(R.id.title_container).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);

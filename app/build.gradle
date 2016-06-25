@@ -35,6 +35,5 @@ dependencies {
 	compile 'io.reactivex:rxjava:1.1.6'
 	compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 	compile 'com.jakewharton:butterknife:8.1.0'
-	compile 'com.ms-square:expandableTextView:0.1.4'
 
 }
