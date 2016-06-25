@@ -92,12 +92,14 @@
 			android:text="@string/header_reviews"
 			android:textStyle="bold"/>
 
-		<android.support.v7.widget.RecyclerView
-			android:id="@+id/recycler_view_reviews"
+		<LinearLayout
+			android:id="@+id/view_reviews"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/margin_8"
-			tools:listitem="@layout/item_review"/>
+			android:divider="@android:color/darker_gray"
+			android:orientation="vertical"
+			android:showDividers="middle"/>
 
 	</LinearLayout>
 </ScrollView>

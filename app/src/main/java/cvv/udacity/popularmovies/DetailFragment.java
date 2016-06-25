@@ -15,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cvv.udacity.popularmovies.adapter.ReviewAdapter;
 import cvv.udacity.popularmovies.adapter.VideoAdapter;
 import cvv.udacity.popularmovies.data.Movie;
 import cvv.udacity.popularmovies.data.Review;
@@ -89,13 +91,13 @@ public class DetailFragment extends Fragment {
 
         if (mMovie != null) {
             setMovieValue();
-            prepareRecyclerViews();
+            prepareRecyclerView();
             startVideosAndReviewsFetch();
         }
         return view;
     }
 
-    private void prepareRecyclerViews() {
+    private void prepareRecyclerView() {
         mVideoAdapter = new VideoAdapter(getActivity());
         mVideoAdapter.setHasStableIds(true);
         mVideoAdapter.setVideoOnItemClickListener(new OnItemClickListener<Video>() {
@@ -120,21 +122,6 @@ public class DetailFragment extends Fragment {
         mVideosRecyclerView.setHasFixedSize(true);
         mVideosRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mVideosRecyclerView.setAdapter(mVideoAdapter);
-
-        mReviewAdapter = new ReviewAdapter(getActivity());
-        mReviewAdapter.setHasStableIds(true);
-        mReviewAdapter.setReviewOnItemClickListener(new OnItemClickListener<Review>() {
-            @Override
-            public void onItemClicked(Review item) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.parse(item.getUrl());
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        });
-        mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mReviewsRecyclerView.setHasFixedSize(true);
-        mReviewsRecyclerView.setAdapter(mReviewAdapter);
     }
 
 
@@ -158,14 +145,14 @@ public class DetailFragment extends Fragment {
                     }
 
                     private void hideReviewsSection() {
-                        mReviewsRecyclerView.setVisibility(View.GONE);
+                        mReviewsView.setVisibility(View.GONE);
                         mHeaderReviews.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNext(ReviewFetch reviewFetch) {
                         if (reviewFetch.getReviews() != null && !reviewFetch.getReviews().isEmpty()) {
-                            mReviewAdapter.setReviews(reviewFetch.getReviews());
+                            createReviewViews(reviewFetch.getReviews());
                         } else {
                             hideReviewsSection();
                         }
@@ -199,10 +186,37 @@ public class DetailFragment extends Fragment {
                         if (videoFetch.getVideos() != null && !videoFetch.getVideos().isEmpty()) {
                             mVideoAdapter.setVideoList(videoFetch.getVideos());
                         } else {
-                            mReviewsRecyclerView.setVisibility(View.GONE);
+                            mVideosRecyclerView.setVisibility(View.GONE);
                         }
                     }
                 });
+    }
+
+    private void createReviewViews(List<Review> reviews) {
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        for (final Review review : reviews) {
+            View view = layoutInflater.inflate(R.layout.item_review, mReviewsView, false);
+            TextView author = (TextView) view.findViewById(R.id.title);
+            TextView content = (TextView) view.findViewById(R.id.content);
+            final ExpandableTextView expandableView = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
+            expandableView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                }
+            });
+            author.setText(review.getAuthor());
+            expandableView.setText(review.getContent());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri uri = Uri.parse(review.getUrl());
+                    intent.setData(uri);
+                    startActivity(intent);
+                }
+            });
+            mReviewsView.addView(view);
+        }
     }
 
     private void setMovieValue() {
