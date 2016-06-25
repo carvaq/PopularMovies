@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<integer name="number_of_columns">2</integer>
+	<integer name="number_of_columns">5</integer>
+
+	<integer name="number_of_columns_with_fragment">3</integer>
 
 </resources>

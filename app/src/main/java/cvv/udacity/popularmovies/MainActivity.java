@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
     private static final String DETAIL_TAG = DetailFragment.class.getSimpleName();
 
     @BindView(R.id.detail_container)
-    private View mDetailContainer;
+    View mDetailContainer;
 
     private boolean mTwoPane;
 
@@ -51,8 +51,12 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detail_container, DetailFragment.newInstance(movie), DETAIL_TAG)
                     .commit();
-            mDetailContainer.setVisibility(View.VISIBLE);
-
+            if (mDetailContainer.getVisibility() == View.GONE) {
+                mDetailContainer.setVisibility(View.VISIBLE);
+                MovieGridFragment fragment = (MovieGridFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.grid_fragment);
+                fragment.updateColumnSize();
+            }
         } else {
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             intent.putExtra(DetailActivity.MOVIE_EXTRA, movie);

@@ -82,4 +82,7 @@ public class MovieGridFragment extends Fragment {
                 });
     }
 
+    public void updateColumnSize() {
+        mGridLayoutManager.setSpanCount(getResources().getInteger(R.integer.number_of_columns_with_fragment));
+    }
 }
