@@ -52,11 +52,11 @@ public class ApiService {
 
         @Headers("Accept:application/json")
         @GET("{id}/videos")
-        Observable<MovieFetch> getVideosForMoview(@Path("id") long id);
+        Observable<MovieFetch> getVideosForMoview(@Path("id") long id,@Query("api_key") String appKey);
 
         @Headers("Accept:application/json")
         @GET("{id}/reviews")
-        Observable<MovieFetch> getReviewsForMoview(@Path("id") long id);
+        Observable<MovieFetch> getReviewsForMoview(@Path("id") long id,@Query("api_key") String appKey);
 
 
     }
