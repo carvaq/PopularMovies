@@ -20,9 +20,11 @@ public class DetailActivity extends AppCompatActivity {
                 savedInstanceState.getParcelable(MOVIE_EXTRA) :
                 getIntent().getParcelableExtra(MOVIE_EXTRA));
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.detail_container, DetailFragment.newInstance(mMovie))
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_container, DetailFragment.newInstance(mMovie))
+                    .commit();
+        }
     }
 
     @Override
