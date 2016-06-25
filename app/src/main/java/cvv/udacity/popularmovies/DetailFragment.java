@@ -197,8 +197,6 @@ public class DetailFragment extends Fragment {
             View view = layoutInflater.inflate(R.layout.item_review, mReviewsView, false);
             TextView author = (TextView) view.findViewById(R.id.title);
             TextView content = (TextView) view.findViewById(R.id.content);
-            TextView openInBrowser = (TextView) view.findViewById(R.id.open_in_browser);
-           // openInBrowser.setText(Html.fromHtml(getString(R.string.open_in_browser)));
             author.setText(review.getAuthor());
             content.setText(review.getContent());
             view.findViewById(R.id.title_container).setOnClickListener(new View.OnClickListener() {

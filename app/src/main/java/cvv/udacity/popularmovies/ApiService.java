@@ -24,6 +24,10 @@ public class ApiService {
     public static final String API_BASE_URL = "https://api.themoviedb.org/3/movie/";
     public static final String IMAGE_URL_WITH_PLACEHOLDERS = "http://image.tmdb.org/t/p/w185%s";
 
+    //http://www.joshuawinn.com/get-the-thumbnails-of-a-youtube-video-standard-url-and-file-names/
+    public static final String YOUTUBE_THUMB_URL_WITH_PLACEHOLDERS = "http://img.youtube.com/vi/%s/default.jpg";
+    public static final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch";
+
 
     private MovieApi mMovieApi;
 
