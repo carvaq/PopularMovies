@@ -1,8 +1,7 @@
-package cvv.udacity.popularmovies;
+package cvv.udacity.popularmovies.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +13,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.ApiService;
+import cvv.udacity.popularmovies.BaseAdapter;
+import cvv.udacity.popularmovies.OnItemClickListener;
+import cvv.udacity.popularmovies.R;
 import cvv.udacity.popularmovies.data.Movie;
 
 /**
@@ -22,22 +25,14 @@ import cvv.udacity.popularmovies.data.Movie;
  * Project: PopularMovies
  */
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
 
-    private Context mContext;
     private List<Movie> mMovies = new ArrayList<>();
-    private LayoutInflater mLayoutInflater;
-    private OnMovieClickListener mOnMovieClickListener;
+    private OnItemClickListener mOnMovieClickListener;
 
     public MovieAdapter(Context context) {
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
-        mOnMovieClickListener = (OnMovieClickListener) context;
-    }
-
-    public void addMovie(Movie movie) {
-        mMovies.add(movie);
-        notifyItemInserted(mMovies.size() - 1);
+        super(context);
+        mOnMovieClickListener = (OnItemClickListener) context;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +47,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnMovieClickListener.onMovieClicked(mMovies.get(getAdapterPosition()));
+                    mOnMovieClickListener.onItemClicked(mMovies.get(getAdapterPosition()));
                 }
             });
         }

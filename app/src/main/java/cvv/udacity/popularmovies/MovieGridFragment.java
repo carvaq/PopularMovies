@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cvv.udacity.popularmovies.adapter.MovieAdapter;
 import cvv.udacity.popularmovies.data.MovieFetch;
 import rx.Observable;
 import rx.Observer;
@@ -42,6 +43,7 @@ public class MovieGridFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_movies_grid, container, false);
 
+        //http://jakewharton.github.io/butterknife/
         ButterKnife.bind(this, rootView);
 
         mMovieAdapter = new MovieAdapter(getActivity());
@@ -53,12 +55,12 @@ public class MovieGridFragment extends Fragment {
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        startFetch();
+        startMovieDataFetch();
 
         return rootView;
     }
 
-    private void startFetch() {
+    private void startMovieDataFetch() {
         //https://kmangutov.wordpress.com/2015/03/28/android-mvp-consuming-restful-apis/
         String orderPref = PreferenceManager.getDefaultSharedPreferences(getActivity())
                 .getString(getString(R.string.pref_sorting_key), getString(R.string.pref_sorting_popular));

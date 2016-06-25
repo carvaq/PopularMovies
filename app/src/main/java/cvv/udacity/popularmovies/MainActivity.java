@@ -7,16 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cvv.udacity.popularmovies.data.Movie;
 
-public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
+public class MainActivity extends AppCompatActivity implements OnItemClickListener<Movie> {
 
     private static final String DETAIL_TAG = DetailFragment.class.getSimpleName();
 
-    @BindView(R.id.detail_container)
-    View mDetailContainer;
+    private View mDetailContainer;
 
     private boolean mTwoPane;
 
@@ -24,10 +21,9 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        //http://jakewharton.github.io/butterknife/
 
-        mTwoPane = findViewById(R.id.detail_container) != null;
+        mDetailContainer = findViewById(R.id.detail_container);
+        mTwoPane = mDetailContainer != null;
     }
 
     @Override
@@ -46,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
     }
 
     @Override
-    public void onMovieClicked(Movie movie) {
+    public void onItemClicked(Movie movie) {
 
         if (mTwoPane) {
             getSupportFragmentManager().beginTransaction()
@@ -65,3 +61,4 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
         }
     }
 }
+
