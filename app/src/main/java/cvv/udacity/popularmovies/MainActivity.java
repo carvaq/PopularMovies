@@ -7,28 +7,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements OnMovieClickListener {
 
     private static final String DETAIL_TAG = DetailFragment.class.getSimpleName();
+
+    @BindView(R.id.detail_container)
+    private View mDetailContainer;
+
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        //http://jakewharton.github.io/butterknife/
 
-        if (UiHelper.isXLargeTablet(this)) {
-            View container = findViewById(R.id.detail_container);
-            container.setVisibility(View.VISIBLE);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.grid_container, new MovieGridFragment())
-                    .add(R.id.detail_container, new DetailFragment(), DETAIL_TAG)
-                    .commit();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.grid_container, new MovieGridFragment())
-                    .commit();
-        }
+        mTwoPane = findViewById(R.id.detail_container) != null;
     }
 
     @Override
@@ -41,18 +39,20 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class
-            ));
+            startActivity(new Intent(this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onMovieClicked(Movie movie) {
-        if (UiHelper.isXLargeTablet(MainActivity.this)) {
-            DetailFragment fragment =
-                    (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAIL_TAG);
-            fragment.updateMovie(movie);
+
+        if (mTwoPane) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, DetailFragment.newInstance(movie), DETAIL_TAG)
+                    .commit();
+            mDetailContainer.setVisibility(View.VISIBLE);
+
         } else {
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
             intent.putExtra(DetailActivity.MOVIE_EXTRA, movie);

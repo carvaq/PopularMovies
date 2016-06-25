@@ -5,6 +5,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -48,6 +49,15 @@ public class ApiService {
         @Headers("Accept:application/json")
         @GET("top_rated")
         Observable<MovieFetch> getTopRated(@Query("api_key") String appKey);
+
+        @Headers("Accept:application/json")
+        @GET("{id}/videos")
+        Observable<MovieFetch> getVideosForMoview(@Path("id") long id);
+
+        @Headers("Accept:application/json")
+        @GET("{id}/reviews")
+        Observable<MovieFetch> getReviewsForMoview(@Path("id") long id);
+
 
     }
 }

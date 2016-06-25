@@ -72,7 +72,7 @@ public class MovieGridFragment extends Fragment {
                     @Override
                     public void onError(Throwable e) {
                         Toast.makeText(getActivity(), R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
-                        Log.e(getTag(), "",e);
+                        Log.e(getTag(), "", e);
                     }
 
                     @Override

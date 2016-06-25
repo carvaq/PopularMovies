@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:baselineAligned="false"
-    tools:context="cvv.udacity.popularmovies.DetailActivity">
-
-    <FrameLayout
-        android:id="@+id/grid_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-
-    <FrameLayout
-        android:id="@+id/detail_container"
-        android:visibility="gone"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"/>
-</LinearLayout>
+<fragment
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/grid_fragment"
+	android:name="cvv.udacity.popularmovies.MovieGridFragment"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:layout="@layout/fragment_movies_grid"/>
