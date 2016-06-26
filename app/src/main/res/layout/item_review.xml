@@ -27,6 +27,7 @@
 			android:id="@+id/open_in_browser"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:background="@drawable/selection_bg"
 			android:text="@string/open_in_browser"
 			android:textColor="#1af"/>
 	</LinearLayout>
@@ -35,8 +36,8 @@
 		android:id="@+id/content"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:trimLength="255"
 		android:paddingBottom="@dimen/margin_16"
+		app:trimLength="255"
 		tools:text="A nice long text that isn't a lorem inpsum. Yay!"/>
 
 
