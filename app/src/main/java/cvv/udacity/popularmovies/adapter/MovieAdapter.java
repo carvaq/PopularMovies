@@ -28,26 +28,37 @@ import cvv.udacity.popularmovies.data.Movie;
 public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
 
     private List<Movie> mMovies = new ArrayList<>();
-    private OnItemClickListener mOnMovieClickListener;
+    private OnItemClickListener<Movie> mOnMovieClickListener;
+    private OnItemClickListener<Movie> mOnFavClickListener;
 
-    public MovieAdapter(Context context) {
+    public MovieAdapter(Context context, OnItemClickListener<Movie> onFavClickListener) {
         super(context);
-        mOnMovieClickListener = (OnItemClickListener) context;
+        mOnMovieClickListener = (OnItemClickListener<Movie>) context;
+        mOnFavClickListener = onFavClickListener;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.image)
-        ImageView mImageView;
+        ImageView mPoster;
+        @BindView(R.id.favourite)
+        ImageView mFavourite;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnMovieClickListener.onItemClicked(mMovies.get(getAdapterPosition()));
+                }
+            });
+            mFavourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnFavClickListener.onItemClicked(mMovies.get(getAdapterPosition()));
+                    mFavourite.setActivated(!mFavourite.isActivated());
                 }
             });
         }
@@ -65,7 +76,9 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
 
         Picasso.with(mContext)
                 .load(String.format(ApiService.IMAGE_URL_WITH_PLACEHOLDERS, movie.getPosterPath()))
-                .into(holder.mImageView);
+                .into(holder.mPoster);
+
+        holder.mFavourite.setActivated(movie.exists());
     }
 
     @Override

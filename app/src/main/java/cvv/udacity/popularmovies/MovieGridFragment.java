@@ -55,7 +55,7 @@ public class MovieGridFragment extends Fragment {
         //http://jakewharton.github.io/butterknife/
         ButterKnife.bind(this, rootView);
 
-        mMovieAdapter = new MovieAdapter(getActivity());
+        mMovieAdapter = new MovieAdapter(getActivity(), mOnFavClickListener);
         mMovieAdapter.setHasStableIds(true);
         mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
 
@@ -139,6 +139,17 @@ public class MovieGridFragment extends Fragment {
         @Override
         public void onNext(MovieFetch movieFetch) {
             mMovieAdapter.setMovies(movieFetch.getMovies());
+        }
+    };
+
+    private OnItemClickListener<Movie> mOnFavClickListener = new OnItemClickListener<Movie>() {
+        @Override
+        public void onItemClicked(Movie item) {
+            if (item.exists()) {
+                item.delete();
+            } else {
+                item.save();
+            }
         }
     };
 
