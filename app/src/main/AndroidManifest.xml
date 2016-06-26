@@ -18,14 +18,6 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".SettingsActivity"
-			android:label="@string/title_activity_settings"
-			android:parentActivityName=".MainActivity">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value="cvv.udacity.popularmovies.MainActivity"/>
-		</activity>
-		<activity
 			android:name=".DetailActivity"
 			android:parentActivityName=".MainActivity">
 			<meta-data

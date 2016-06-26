@@ -3,6 +3,7 @@
 
 	<string name="pref_sorting_key">sorting</string>
 	<string name="pref_sorting_label">Movies Sort Order</string>
+	<string name="pref_sorting_favourites">Favourites</string>
 	<string name="pref_sorting_popular">Popular</string>
 	<string name="pref_sorting_top_rated">Top Rated</string>
 
@@ -16,7 +17,6 @@
 	<string name="header_videos">Videos</string>
 	<string name="header_reviews">Reviews</string>
 	<string name="error_video_cannot_open">Can not open video</string>
-	<string name="expand_more">MORE</string>
 	<string name="open_in_browser"><u>Open in browser</u></string>
 
 </resources>
