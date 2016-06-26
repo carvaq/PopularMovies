@@ -117,10 +117,9 @@ public class DetailFragment extends Fragment {
                 if (Video.YOUTUBE_SITE.equals(item.getSite().toLowerCase())) {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
-                        Uri uri = new Uri.Builder().path(ApiService.YOUTUBE_WATCH_URL)
-                                .appendQueryParameter("v", item.getKey())
-                                .build();
-                        intent.setData(uri);
+                        String url = String.format(ApiService.YOUTUBE_WATCH_URL_WITH_PLACEHOLDERS, item.getKey());
+                        Log.d(TAG, "onItemClicked: " + url);
+                        intent.setData(Uri.parse(url));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(getActivity(), R.string.error_video_cannot_open, Toast.LENGTH_LONG).show();
@@ -134,7 +133,6 @@ public class DetailFragment extends Fragment {
         mVideosRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mVideosRecyclerView.setAdapter(mVideoAdapter);
     }
-
 
     private void startVideosAndReviewsFetch() {
         ApiService apiService = new ApiService();

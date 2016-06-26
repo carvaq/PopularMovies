@@ -26,7 +26,7 @@ public class ApiService {
 
     //http://www.joshuawinn.com/get-the-thumbnails-of-a-youtube-video-standard-url-and-file-names/
     public static final String YOUTUBE_THUMB_URL_WITH_PLACEHOLDERS = "http://img.youtube.com/vi/%s/default.jpg";
-    public static final String YOUTUBE_WATCH_URL = "https://www.youtube.com/watch";
+    public static final String YOUTUBE_WATCH_URL_WITH_PLACEHOLDERS = "https://www.youtube.com/watch?v=%s";
 
 
     private MovieApi mMovieApi;
