@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.raizlabs.android.dbflow.config.FlowConfig;
-import com.raizlabs.android.dbflow.config.FlowManager;
-
 import cvv.udacity.popularmovies.data.Movie;
 
-public class MainActivity extends AppCompatActivity implements OnItemClickListener<Movie> {
+public class MainActivity extends AppCompatActivity implements OnItemClickListener<Movie>, OnMovieFavouriteStatusChangedListener {
 
     private static final String DETAIL_TAG = DetailFragment.class.getSimpleName();
 
@@ -25,6 +22,10 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
         mDetailContainer = findViewById(R.id.detail_container);
         mTwoPane = mDetailContainer != null;
+
+        MovieGridFragment fragment = (MovieGridFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.grid_fragment);
+        fragment.showingDetails(mTwoPane);
 
     }
 
@@ -46,6 +47,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             intent.putExtra(DetailActivity.MOVIE_EXTRA, movie);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onStatusChanged(Movie movie, boolean favourite) {
+        MovieGridFragment fragment = (MovieGridFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.grid_fragment);
+        fragment.updateFavouriteStatus(movie, favourite);
     }
 }
 

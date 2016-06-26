@@ -235,6 +235,10 @@ public class DetailFragment extends Fragment {
                 mMovie.save();
             }
             mFavourite.setActivated(!mFavourite.isActivated());
+
+            if(getActivity() instanceof OnMovieFavouriteStatusChangedListener){
+                ((OnMovieFavouriteStatusChangedListener) getActivity()).onStatusChanged(mMovie, mFavourite.isActivated());
+            }
         }
     };
 

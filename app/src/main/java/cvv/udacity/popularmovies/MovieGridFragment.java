@@ -42,6 +42,7 @@ public class MovieGridFragment extends Fragment {
 
     private MovieAdapter mMovieAdapter;
     private GridLayoutManager mGridLayoutManager;
+    private boolean mShowingDetails;
 
     public MovieGridFragment() {
     }
@@ -57,6 +58,7 @@ public class MovieGridFragment extends Fragment {
 
         mMovieAdapter = new MovieAdapter(getActivity(), mOnFavClickListener);
         mMovieAdapter.setHasStableIds(true);
+        mMovieAdapter.setDetailsShowing(mShowingDetails);
         mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
@@ -177,5 +179,16 @@ public class MovieGridFragment extends Fragment {
                 .edit()
                 .putString(getString(R.string.pref_sorting_key), pref)
                 .commit();
+    }
+
+    public void showingDetails(boolean showingDetails) {
+        mShowingDetails = showingDetails;
+        if (mMovieAdapter != null) {
+            mMovieAdapter.setDetailsShowing(showingDetails);
+        }
+    }
+
+    public void updateFavouriteStatus(Movie movie, boolean favorite) {
+        mMovieAdapter.updateMovie(movie, favorite);
     }
 }

@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cvv.udacity.popularmovies.ApiService;
 import cvv.udacity.popularmovies.BaseAdapter;
+import cvv.udacity.popularmovies.MovieWrapper;
 import cvv.udacity.popularmovies.OnItemClickListener;
 import cvv.udacity.popularmovies.R;
 import cvv.udacity.popularmovies.data.Movie;
@@ -27,9 +28,11 @@ import cvv.udacity.popularmovies.data.Movie;
 
 public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
 
-    private List<Movie> mMovies = new ArrayList<>();
+    private List<MovieWrapper> mViewItems = new ArrayList<>();
     private OnItemClickListener<Movie> mOnMovieClickListener;
     private OnItemClickListener<Movie> mOnFavClickListener;
+    private boolean mDetailsShowing;
+    private int mLastSelectedMovie = -1;
 
     public MovieAdapter(Context context, OnItemClickListener<Movie> onFavClickListener) {
         super(context);
@@ -51,19 +54,30 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
             mPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnMovieClickListener.onItemClicked(mMovies.get(getAdapterPosition()));
+                    MovieWrapper movieWrapper = mViewItems.get(getAdapterPosition());
+                    mOnMovieClickListener.onItemClicked(movieWrapper.getMovie());
+                    if (mDetailsShowing) {
+                        if (mLastSelectedMovie != -1) {
+                            mViewItems.get(mLastSelectedMovie).setCurrentlySeclected(false);
+                            notifyItemChanged(mLastSelectedMovie);
+                        }
+                        mLastSelectedMovie = mViewItems.indexOf(movieWrapper);
+                        movieWrapper.setCurrentlySeclected(true);
+                        notifyItemChanged(mLastSelectedMovie);
+                    }
                 }
             });
             mFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnFavClickListener.onItemClicked(mMovies.get(getAdapterPosition()));
-                    mFavourite.setActivated(!mFavourite.isActivated());
+                    MovieWrapper movieWrapper = mViewItems.get(getAdapterPosition());
+                    mOnFavClickListener.onItemClicked(movieWrapper.getMovie());
+                    movieWrapper.setFavourite(!mFavourite.isActivated());
+                    notifyItemChanged(mViewItems.indexOf(movieWrapper));
                 }
             });
         }
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -72,27 +86,41 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Movie movie = mMovies.get(position);
+        MovieWrapper movieWrapper = mViewItems.get(position);
 
+        holder.mPoster.setActivated(movieWrapper.isCurrentlySeclected());
         Picasso.with(mContext)
-                .load(String.format(ApiService.IMAGE_URL_WITH_PLACEHOLDERS, movie.getPosterPath()))
+                .load(String.format(ApiService.IMAGE_URL_WITH_PLACEHOLDERS, movieWrapper.getPosterPath()))
                 .into(holder.mPoster);
 
-        holder.mFavourite.setActivated(movie.exists());
+        holder.mFavourite.setActivated(movieWrapper.isFavourite());
     }
 
     @Override
     public int getItemCount() {
-        return mMovies.size();
+        return mViewItems.size();
     }
 
     @Override
     public long getItemId(int position) {
-        return mMovies.get(position).getId();
+        return mViewItems.get(position).getId();
     }
 
     public void setMovies(List<Movie> movies) {
-        mMovies = movies;
+        for (Movie movie : movies) {
+            mViewItems.add(new MovieWrapper(movie));
+        }
         notifyDataSetChanged();
+    }
+
+    public void setDetailsShowing(boolean detailsShowing) {
+        mDetailsShowing = detailsShowing;
+    }
+
+    public void updateMovie(Movie movie, boolean favouriteStatus) {
+        MovieWrapper movieWrapper = new MovieWrapper(movie);
+        int index = mViewItems.indexOf(movieWrapper);
+        mViewItems.get(index).setFavourite(favouriteStatus);
+        notifyItemChanged(index);
     }
 }
