@@ -3,8 +3,9 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              tools:background="@android:color/holo_red_dark">
 
 	<LinearLayout
 		android:id="@+id/title_container"
@@ -12,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:paddingBottom="@dimen/margin_8"
-		android:paddingTop="@dimen/margin_8">
+		android:paddingTop="@dimen/margin_16">
 
 		<TextView
 			android:id="@+id/title"
@@ -35,6 +36,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		app:trimLength="255"
+		android:paddingBottom="@dimen/margin_16"
 		tools:text="A nice long text that isn't a lorem inpsum. Yay!"/>
 
 
