@@ -1,10 +1,15 @@
 package cvv.udacity.popularmovies;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,6 +42,8 @@ import rx.schedulers.Schedulers;
  */
 public class MovieGridFragment extends Fragment {
 
+    private static final String LAST_POS = "last_selected_pos";
+
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
@@ -56,10 +63,15 @@ public class MovieGridFragment extends Fragment {
         //http://jakewharton.github.io/butterknife/
         ButterKnife.bind(this, rootView);
 
+        mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
         mMovieAdapter = new MovieAdapter(getActivity(), mOnFavClickListener);
         mMovieAdapter.setHasStableIds(true);
+        if (savedInstanceState != null) {
+            mMovieAdapter.setLastSelectedMovie(savedInstanceState.getInt(LAST_POS, -1));
+        } else if (mShowingDetails) {
+            mMovieAdapter.setLastSelectedMovie(0);
+        }
         mMovieAdapter.setDetailsShowing(mShowingDetails);
-        mGridLayoutManager = new GridLayoutManager(getActivity(), getResources().getInteger(R.integer.number_of_columns));
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -69,6 +81,7 @@ public class MovieGridFragment extends Fragment {
         setHasOptionsMenu(true);
 
         startMovieDataFetch();
+        registerReceiver();
 
         return rootView;
     }
@@ -92,6 +105,11 @@ public class MovieGridFragment extends Fragment {
         if (!pref.equals(item.getTitle())) {
             item.setChecked(true);
             setSortPreference(String.valueOf(item.getTitle()));
+            if (mShowingDetails) {
+                mMovieAdapter.setLastSelectedMovie(0);
+            } else {
+                mMovieAdapter.setLastSelectedMovie(-1);
+            }
             startMovieDataFetch();
         }
         return true;
@@ -141,6 +159,11 @@ public class MovieGridFragment extends Fragment {
         @Override
         public void onNext(MovieFetch movieFetch) {
             mMovieAdapter.setMovies(movieFetch.getMovies());
+            if (mMovieAdapter.getLastSelectedMovie() != -1) {
+                mGridLayoutManager.scrollToPosition(mMovieAdapter.getLastSelectedMovie());
+                ((OnItemClickListener<Movie>) getActivity())
+                        .onItemClicked(movieFetch.getMovies().get(mMovieAdapter.getLastSelectedMovie()));
+            }
         }
     };
 
@@ -152,8 +175,27 @@ public class MovieGridFragment extends Fragment {
             } else {
                 item.save();
             }
+
+            Intent intent = new Intent(DetailFragment.INTENT_FAVOURITE_UPDATE);
+            intent.putExtra(DetailActivity.MOVIE_EXTRA, item);
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
     };
+
+    private BroadcastReceiver mFavUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(this);
+            Movie movie = intent.getParcelableExtra(DetailActivity.MOVIE_EXTRA);
+            mMovieAdapter.updateMovie(movie);
+            registerReceiver();
+        }
+    };
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(DetailFragment.INTENT_FAVOURITE_UPDATE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFavUpdateReceiver, intentFilter);
+    }
 
     private MovieFetch getFavouriteItems() {
         MovieFetch movieFetch = new MovieFetch();
@@ -161,11 +203,6 @@ public class MovieGridFragment extends Fragment {
         List<Movie> movies = SQLite.select().from(Movie.class).queryList();
         movieFetch.setMovies(movies);
         return movieFetch;
-    }
-
-
-    public void updateColumnSize() {
-        mGridLayoutManager.setSpanCount(getResources().getInteger(R.integer.number_of_columns_with_fragment));
     }
 
     @NonNull
@@ -185,10 +222,13 @@ public class MovieGridFragment extends Fragment {
         mShowingDetails = showingDetails;
         if (mMovieAdapter != null) {
             mMovieAdapter.setDetailsShowing(showingDetails);
+            mMovieAdapter.setLastSelectedMovie(showingDetails ? 0 : -1);
         }
     }
 
-    public void updateFavouriteStatus(Movie movie, boolean favorite) {
-        mMovieAdapter.updateMovie(movie, favorite);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LAST_POS, mMovieAdapter.getLastSelectedMovie());
     }
 }

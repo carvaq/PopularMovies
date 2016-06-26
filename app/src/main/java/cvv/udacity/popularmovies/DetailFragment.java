@@ -1,10 +1,14 @@
 package cvv.udacity.popularmovies;
 
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,7 +38,11 @@ import rx.schedulers.Schedulers;
 
 
 public class DetailFragment extends Fragment {
+
+    public static final String INTENT_FAVOURITE_UPDATE = "ifu";
+
     private static final String TAG = DetailFragment.class.getSimpleName();
+
     @BindView(R.id.synopsis)
     TextView mSynopsis;
     @BindView(R.id.title)
@@ -80,6 +88,8 @@ public class DetailFragment extends Fragment {
         if (savedInstanceState != null) {
             mMovie = savedInstanceState.getParcelable(DetailActivity.MOVIE_EXTRA);
         }
+
+        registerReceiver();
     }
 
     @Override
@@ -236,11 +246,28 @@ public class DetailFragment extends Fragment {
             }
             mFavourite.setActivated(!mFavourite.isActivated());
 
-            if(getActivity() instanceof OnMovieFavouriteStatusChangedListener){
-                ((OnMovieFavouriteStatusChangedListener) getActivity()).onStatusChanged(mMovie, mFavourite.isActivated());
+            Intent intent = new Intent(INTENT_FAVOURITE_UPDATE);
+            intent.putExtra(DetailActivity.MOVIE_EXTRA, mMovie);
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
+    };
+
+    private BroadcastReceiver mFavUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Movie movie = intent.getParcelableExtra(DetailActivity.MOVIE_EXTRA);
+            if (movie.equals(mMovie)) {
+                LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(this);
+                mFavourite.setActivated(mMovie.exists());
+                registerReceiver();
             }
         }
     };
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(INTENT_FAVOURITE_UPDATE);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFavUpdateReceiver, intentFilter);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

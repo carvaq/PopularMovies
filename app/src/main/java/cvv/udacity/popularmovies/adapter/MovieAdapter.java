@@ -107,8 +107,11 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
     }
 
     public void setMovies(List<Movie> movies) {
-        for (Movie movie : movies) {
-            mViewItems.add(new MovieWrapper(movie));
+        mViewItems.clear();
+        for (int i = 0; i < movies.size(); i++) {
+            MovieWrapper movieWrapper = new MovieWrapper(movies.get(i));
+            movieWrapper.setCurrentlySeclected(mLastSelectedMovie == i);
+            mViewItems.add(movieWrapper);
         }
         notifyDataSetChanged();
     }
@@ -117,10 +120,18 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
         mDetailsShowing = detailsShowing;
     }
 
-    public void updateMovie(Movie movie, boolean favouriteStatus) {
+    public void updateMovie(Movie movie) {
         MovieWrapper movieWrapper = new MovieWrapper(movie);
         int index = mViewItems.indexOf(movieWrapper);
-        mViewItems.get(index).setFavourite(favouriteStatus);
+        mViewItems.get(index).setFavourite(movie.exists());
         notifyItemChanged(index);
+    }
+
+    public int getLastSelectedMovie() {
+        return mLastSelectedMovie;
+    }
+
+    public void setLastSelectedMovie(int lastSelectedMovie) {
+        mLastSelectedMovie = lastSelectedMovie;
     }
 }
