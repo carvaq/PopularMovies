@@ -20,20 +20,28 @@ android {
 	}
 }
 
+def supportLibVersion = "24.0.0"
+def dbflowVersion = "3.0.1"
+def retrofitVersion = "2.1.0"
+def butterknifeVersion = "8.1.0"
+
+
 dependencies {
-	apt 'com.jakewharton:butterknife-compiler:8.1.0'
+	apt "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
+	apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflowVersion}"
 
 	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:appcompat-v7:24.0.0'
+	compile "com.android.support:appcompat-v7:${supportLibVersion}"
 	compile 'com.squareup.picasso:picasso:2.5.2'
-	compile 'com.android.support:design:24.0.0'
-	compile 'com.android.support:support-v4:24.0.0'
-	compile 'com.android.support:support-vector-drawable:24.0.0'
-	compile 'com.squareup.retrofit2:retrofit:2.1.0'
-	compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+	compile "com.android.support:design:${supportLibVersion}"
+	compile "com.android.support:support-v4:${supportLibVersion}"
+	compile "com.android.support:support-vector-drawable:${supportLibVersion}"
+	compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+	compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 	compile 'io.reactivex:rxandroid:1.2.1'
 	compile 'io.reactivex:rxjava:1.1.6'
-	compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-	compile 'com.jakewharton:butterknife:8.1.0'
-
+	compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
+	compile "com.jakewharton:butterknife:${butterknifeVersion}"
+	compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflowVersion}"
+	compile "com.github.Raizlabs.DBFlow:dbflow:${dbflowVersion}"
 }

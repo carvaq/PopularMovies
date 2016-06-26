@@ -9,23 +9,23 @@ import java.util.List;
  * Created by Caro Vaquero
  * Date: 25.06.2016
  * Project: PopularMovies
- *
- *
+ * <p/>
+ * <p/>
  * Sample JSON
- {
- "id": 550,
- "results": [
- {
- "id": "533ec654c3a36854480003eb",
- "iso_639_1": "en",
- "key": "SUXWAEX2jlg",
- "name": "Trailer 1",
- "site": "YouTube",
- "size": 720,
- "type": "Trailer"
- }
- ]
- }
+ * {
+ * "id": 550,
+ * "results": [
+ * {
+ * "id": "533ec654c3a36854480003eb",
+ * "iso_639_1": "en",
+ * "key": "SUXWAEX2jlg",
+ * "name": "Trailer 1",
+ * "site": "YouTube",
+ * "size": 720,
+ * "type": "Trailer"
+ * }
+ * ]
+ * }
  */
 
 public class VideoFetch {

@@ -6,6 +6,7 @@ import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
 /**
  * User: Bazlur Rahman Rokon
  * Date: 9/7/13 - 3:33 AM

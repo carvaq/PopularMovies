@@ -8,6 +8,7 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:animateLayoutChanges="true"
 		android:orientation="vertical"
 		android:paddingLeft="@dimen/activity_horizontal_margin"
 		android:paddingRight="@dimen/activity_horizontal_margin"
@@ -57,11 +58,18 @@
 					android:textStyle="bold"
 					tools:text="6/10"/>
 
+				<ImageView
+					android:id="@+id/favourite"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/margin_8"
+					android:src="@drawable/favourite"/>
+
 				<TextView
 					android:id="@+id/synopsis"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="@dimen/margin_32"
+					android:layout_marginTop="@dimen/margin_16"
 					tools:text="Synopsis of what's happening in the movie. Sometimes even better than the movie. Abd they try to build up drama and interest, sometimes achieving none."/>
 
 			</LinearLayout>

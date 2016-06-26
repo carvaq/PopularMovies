@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,31 +99,41 @@ public class MovieGridFragment extends Fragment {
         //https://kmangutov.wordpress.com/2015/03/28/android-mvp-consuming-restful-apis/
         String sortPref = getSortPreference();
 
-        ApiService apiService = new ApiService();
 
-        Observable<MovieFetch> observable;
-        if (getString(R.string.pref_sorting_popular).equals(sortPref)) {
-            observable = apiService.getApi().getPopular(ApiService.APP_KEY);
-        } else if (getString(R.string.pref_sorting_top_rated).equals(sortPref)) {
-            observable = apiService.getApi().getTopRated(ApiService.APP_KEY);
+        if (getString(R.string.pref_sorting_favourites).equals(sortPref)) {
+
+            Observable.just(getFavouriteItems())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mMovieObserver);
         } else {
-            observable = Observable.just(getFavouriteItems());
-        }
 
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mMovieObserver);
+            ApiService apiService = new ApiService();
+            Observable<MovieFetch> observable;
+
+            if (getString(R.string.pref_sorting_popular).equals(sortPref)) {
+                observable = apiService.getApi().getPopular(ApiService.APP_KEY);
+            } else {
+                observable = apiService.getApi().getTopRated(ApiService.APP_KEY);
+            }
+
+            observable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mMovieObserver);
+        }
     }
 
     private Observer<MovieFetch> mMovieObserver = new Observer<MovieFetch>() {
+        public static final String TAG = "Observer";
+
         @Override
         public void onCompleted() {
+            Log.d(TAG, "onCompleted: ");
         }
 
         @Override
         public void onError(Throwable e) {
             Toast.makeText(getActivity(), R.string.error_something_went_wrong, Toast.LENGTH_LONG).show();
-            Log.e(getTag(), "", e);
+            Log.e(TAG, "", e);
         }
 
         @Override
@@ -132,7 +144,9 @@ public class MovieGridFragment extends Fragment {
 
     private MovieFetch getFavouriteItems() {
         MovieFetch movieFetch = new MovieFetch();
-        movieFetch.setMovies(new ArrayList<Movie>());
+        //https://github.com/Raizlabs/DBFlow/blob/master/usage2/GettingStarted.md
+        List<Movie> movies = SQLite.select().from(Movie.class).queryList();
+        movieFetch.setMovies(movies);
         return movieFetch;
     }
 

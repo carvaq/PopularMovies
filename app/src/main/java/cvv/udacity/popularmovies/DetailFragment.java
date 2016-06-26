@@ -53,6 +53,8 @@ public class DetailFragment extends Fragment {
     ViewGroup mReviewsView;
     @BindView(R.id.recycler_view_videos)
     RecyclerView mVideosRecyclerView;
+    @BindView(R.id.favourite)
+    ImageView mFavourite;
 
     private Movie mMovie;
 
@@ -213,6 +215,8 @@ public class DetailFragment extends Fragment {
     }
 
     private void setMovieValue() {
+        mFavourite.setActivated(mMovie.exists());
+        mFavourite.setOnClickListener(mOnFavClicked);
         mSynopsis.setText(mMovie.getSynopsis());
         mTitle.setText(mMovie.getOriginalTitle());
         mVoteAverage.setText(getString(R.string.detail_vote_average, mMovie.getVoteAverage()));
@@ -222,6 +226,17 @@ public class DetailFragment extends Fragment {
                 .into(mPoster);
     }
 
+    private View.OnClickListener mOnFavClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (mFavourite.isActivated()) {
+                mMovie.delete();
+            } else {
+                mMovie.save();
+            }
+            mFavourite.setActivated(!mFavourite.isActivated());
+        }
+    };
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

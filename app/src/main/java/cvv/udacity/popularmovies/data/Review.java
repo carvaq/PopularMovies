@@ -6,8 +6,9 @@ import com.google.gson.annotations.SerializedName;
  * Created by Caro Vaquero
  * Date: 25.06.2016
  * Project: PopularMovies
- *
+ * <p/>
  * For sample JSON:
+ *
  * @see ReviewFetch
  */
 public class Review {

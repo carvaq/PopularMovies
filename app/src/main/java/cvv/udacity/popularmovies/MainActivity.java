@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
+
 import cvv.udacity.popularmovies.data.Movie;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener<Movie> {
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
         mDetailContainer = findViewById(R.id.detail_container);
         mTwoPane = mDetailContainer != null;
+
     }
 
     @Override

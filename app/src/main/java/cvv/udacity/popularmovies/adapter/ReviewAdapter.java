@@ -24,7 +24,7 @@ import cvv.udacity.popularmovies.data.Review;
 public class ReviewAdapter extends BaseAdapter<ReviewAdapter.ViewHolder> {
 
     private List<Review> mReviews = new ArrayList<>();
-private OnItemClickListener<Review> mReviewOnItemClickListener;
+    private OnItemClickListener<Review> mReviewOnItemClickListener;
 
     public ReviewAdapter(Context context) {
         super(context);

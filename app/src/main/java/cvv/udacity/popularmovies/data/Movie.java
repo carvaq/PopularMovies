@@ -1,9 +1,16 @@
 package cvv.udacity.popularmovies.data;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import cvv.udacity.popularmovies.AppDatabase;
 
 /**
  * Created by Caro Vaquero
@@ -11,7 +18,8 @@ import com.google.gson.annotations.SerializedName;
  * Project: PopularMovies
  */
 
-public class Movie implements Parcelable {
+@Table(database = AppDatabase.class)
+public class Movie extends BaseModel implements Parcelable {
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
@@ -25,13 +33,17 @@ public class Movie implements Parcelable {
     };
 
     @SerializedName("id")
-    private Integer mId;
+    @Column(name = "id", getterName = "getId", setterName = "setId")
+    @PrimaryKey
+    private Long mId;
     @SerializedName("title")
     private String mTitle;
+    @SerializedName("poster_path")
+    @Column(name = "posterPath", getterName = "getPosterPath", setterName = "setPosterPath")
+    private String mPosterPath;
+    @Column(name = "originalTitle", getterName = "getOriginalTitle", setterName = "setOriginalTitle")
     @SerializedName("original_title")
     private String mOriginalTitle;
-    @SerializedName("poster_path")
-    private String mPosterPath;
     @SerializedName("overview")
     private String mSynopsis;
     @SerializedName("release_date")
@@ -43,7 +55,7 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
-        mId = in.readInt();
+        mId = in.readLong();
         mTitle = in.readString();
         mOriginalTitle = in.readString();
         mPosterPath = in.readString();
@@ -52,12 +64,12 @@ public class Movie implements Parcelable {
         mReleaseDate = in.readString();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return mId;
     }
 
-    public void setId(Integer id) {
-        this.mId = id;
+    public void setId(Long id) {
+        mId = id;
     }
 
     public String getTitle() {
@@ -147,7 +159,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
+        dest.writeLong(mId);
         dest.writeString(mTitle);
         dest.writeString(mOriginalTitle);
         dest.writeString(mPosterPath);

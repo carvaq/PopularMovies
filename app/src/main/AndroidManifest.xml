@@ -6,6 +6,7 @@
 
 	<application
 		android:allowBackup="true"
+		android:name=".PopularMoviesApplication"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:supportsRtl="true"
@@ -24,6 +25,7 @@
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="cvv.udacity.popularmovies.MainActivity"/>
 		</activity>
+
 	</application>
 
 </manifest>
