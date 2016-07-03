@@ -163,6 +163,9 @@ public class DetailFragment extends Fragment {
 
                     @Override
                     public void onNext(ReviewFetch reviewFetch) {
+                        if(!isAdded()){
+                            return;
+                        }
                         if (reviewFetch.getReviews() != null && !reviewFetch.getReviews().isEmpty()) {
                             createReviewViews(reviewFetch.getReviews());
                         } else {
