@@ -40,6 +40,10 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
         mOnFavClickListener = onFavClickListener;
     }
 
+    public Movie getSelectedItems() {
+        return mViewItems.get(mLastSelectedMovie).getMovie();
+    }
+
     protected class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.image)
@@ -58,11 +62,11 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
                     mOnMovieClickListener.onItemClicked(movieWrapper.getMovie());
                     if (mDetailsShowing) {
                         if (mLastSelectedMovie != -1) {
-                            mViewItems.get(mLastSelectedMovie).setCurrentlySeclected(false);
+                            mViewItems.get(mLastSelectedMovie).setCurrentlySelected(false);
                             notifyItemChanged(mLastSelectedMovie);
                         }
                         mLastSelectedMovie = mViewItems.indexOf(movieWrapper);
-                        movieWrapper.setCurrentlySeclected(true);
+                        movieWrapper.setCurrentlySelected(true);
                         notifyItemChanged(mLastSelectedMovie);
                     }
                 }
@@ -88,7 +92,7 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         MovieWrapper movieWrapper = mViewItems.get(position);
 
-        holder.mPoster.setActivated(movieWrapper.isCurrentlySeclected());
+        holder.mPoster.setActivated(movieWrapper.isCurrentlySelected());
         Picasso.with(mContext)
                 .load(String.format(ApiService.IMAGE_URL_WITH_PLACEHOLDERS, movieWrapper.getPosterPath()))
                 .into(holder.mPoster);
@@ -110,7 +114,7 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
         mViewItems.clear();
         for (int i = 0; i < movies.size(); i++) {
             MovieWrapper movieWrapper = new MovieWrapper(movies.get(i));
-            movieWrapper.setCurrentlySeclected(mLastSelectedMovie == i);
+            movieWrapper.setCurrentlySelected(mLastSelectedMovie == i);
             mViewItems.add(movieWrapper);
         }
         notifyDataSetChanged();
@@ -121,10 +125,39 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
     }
 
     public void updateMovie(Movie movie) {
-        MovieWrapper movieWrapper = new MovieWrapper(movie);
-        int index = mViewItems.indexOf(movieWrapper);
+        int index = getIndexOfMovie(movie);
         mViewItems.get(index).setFavourite(movie.exists());
         notifyItemChanged(index);
+    }
+
+    public int getIndexOfMovie(Movie movie) {
+        MovieWrapper movieWrapper = new MovieWrapper(movie);
+        return mViewItems.indexOf(movieWrapper);
+    }
+
+    public boolean removeMovie(Movie movie) {
+        int index = getIndexOfMovie(movie);
+        mViewItems.remove(index);
+        notifyItemRemoved(index);
+        return updateSelectedIndex(index);
+    }
+
+    private boolean updateSelectedIndex(int index) {
+        int nextSelectedIndex = -1;
+
+        if (mLastSelectedMovie > index) {
+            mLastSelectedMovie--;
+        } else if (mLastSelectedMovie == index && mViewItems.size() > 0) {
+            nextSelectedIndex = 0;
+        }
+
+        if (nextSelectedIndex != -1) {
+            mViewItems.get(nextSelectedIndex).setCurrentlySelected(true);
+            mLastSelectedMovie = nextSelectedIndex;
+            notifyItemChanged(nextSelectedIndex);
+            return true;
+        }
+        return false;
     }
 
     public int getLastSelectedMovie() {

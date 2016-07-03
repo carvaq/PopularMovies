@@ -4,11 +4,11 @@
 
 	<!--From Sunshine project-->
 
-	<!-- State when a row is being pressed, but hasn't yet been currentlySeclected (finger down) -->
+	<!-- State when a row is being pressed, but hasn't yet been currentlySelected (finger down) -->
 	<item android:drawable="@color/translucent"
 	      android:state_pressed="true"/>
 
-	<!-- When the view is "currentlySeclected".  In SINGLE_CHOICE_MODE, it flags the active row
+	<!-- When the view is "currentlySelected".  In SINGLE_CHOICE_MODE, it flags the active row
 		 of a ListView -->
 	<item android:drawable="@color/translucent"
 	      android:state_activated="true"/>

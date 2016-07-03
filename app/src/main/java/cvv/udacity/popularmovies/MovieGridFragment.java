@@ -159,7 +159,7 @@ public class MovieGridFragment extends Fragment {
         @Override
         public void onNext(MovieFetch movieFetch) {
             mMovieAdapter.setMovies(movieFetch.getMovies());
-            if (mMovieAdapter.getLastSelectedMovie() != -1) {
+            if (mMovieAdapter.getLastSelectedMovie() != -1 && mMovieAdapter.getItemCount() > 0) {
                 mGridLayoutManager.scrollToPosition(mMovieAdapter.getLastSelectedMovie());
                 ((OnItemClickListener<Movie>) getActivity())
                         .onItemClicked(movieFetch.getMovies().get(mMovieAdapter.getLastSelectedMovie()));
@@ -185,10 +185,27 @@ public class MovieGridFragment extends Fragment {
     private BroadcastReceiver mFavUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(this);
+            if (isAdded()) {
+                LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(this);
+                updateAdapter(intent);
+                registerReceiver();
+            }
+        }
+
+        private void updateAdapter(Intent intent) {
             Movie movie = intent.getParcelableExtra(DetailActivity.MOVIE_EXTRA);
-            mMovieAdapter.updateMovie(movie);
-            registerReceiver();
+            if (getString(R.string.pref_sorting_favourites).equals(getSortPreference())) {
+                boolean updateDetailsNeeded = mMovieAdapter.removeMovie(movie);
+                if (updateDetailsNeeded) {
+                    ((OnItemClickListener<Movie>) getActivity())
+                            .onItemClicked(mMovieAdapter.getSelectedItems());
+                } else if (mMovieAdapter.getItemCount() == 0) {
+                    ((OnItemClickListener<Movie>) getActivity())
+                            .onItemClicked(null);
+                }
+            } else {
+                mMovieAdapter.updateMovie(movie);
+            }
         }
     };
 

@@ -43,6 +43,8 @@ public class DetailFragment extends Fragment {
 
     private static final String TAG = DetailFragment.class.getSimpleName();
 
+    @BindView(R.id.content)
+    ViewGroup mContent;
     @BindView(R.id.synopsis)
     TextView mSynopsis;
     @BindView(R.id.title)
@@ -101,9 +103,11 @@ public class DetailFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         if (mMovie != null) {
-            setMovieValue();
+            setMovieValues();
             prepareRecyclerView();
             startVideosAndReviewsFetch();
+        } else {
+            mContent.setVisibility(View.INVISIBLE);
         }
         return view;
     }
@@ -222,7 +226,8 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    private void setMovieValue() {
+    private void setMovieValues() {
+        mContent.setVisibility(View.VISIBLE);
         mFavourite.setActivated(mMovie.exists());
         mFavourite.setOnClickListener(mOnFavClicked);
         mSynopsis.setText(mMovie.getSynopsis());
@@ -254,7 +259,7 @@ public class DetailFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Movie movie = intent.getParcelableExtra(DetailActivity.MOVIE_EXTRA);
-            if (movie.equals(mMovie)) {
+            if (movie.equals(mMovie) && isAdded()) {
                 LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(this);
                 mFavourite.setActivated(mMovie.exists());
                 registerReceiver();

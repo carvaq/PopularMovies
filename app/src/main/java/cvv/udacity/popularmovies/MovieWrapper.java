@@ -10,7 +10,7 @@ import cvv.udacity.popularmovies.data.Movie;
 public class MovieWrapper {
     private Long mId;
     private String mPosterPath;
-    private boolean mIsCurrentlySeclected;
+    private boolean mIsCurrentlySelected;
     private boolean mFavourite;
     private Movie mMovie;
 
@@ -37,12 +37,12 @@ public class MovieWrapper {
         mPosterPath = posterPath;
     }
 
-    public boolean isCurrentlySeclected() {
-        return mIsCurrentlySeclected;
+    public boolean isCurrentlySelected() {
+        return mIsCurrentlySelected;
     }
 
-    public void setCurrentlySeclected(boolean currentlySeclected) {
-        mIsCurrentlySeclected = currentlySeclected;
+    public void setCurrentlySelected(boolean currentlySelected) {
+        mIsCurrentlySelected = currentlySelected;
     }
 
     public boolean isFavourite() {

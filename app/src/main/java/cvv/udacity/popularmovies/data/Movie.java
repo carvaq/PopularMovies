@@ -37,6 +37,7 @@ public class Movie extends BaseModel implements Parcelable {
     @PrimaryKey
     private Long mId;
     @SerializedName("title")
+    @Column(name = "title", getterName = "getTitle", setterName = "setTitle")
     private String mTitle;
     @SerializedName("poster_path")
     @Column(name = "posterPath", getterName = "getPosterPath", setterName = "setPosterPath")
@@ -45,10 +46,13 @@ public class Movie extends BaseModel implements Parcelable {
     @SerializedName("original_title")
     private String mOriginalTitle;
     @SerializedName("overview")
+    @Column(name = "overview", getterName = "getSynopsis", setterName = "setSynopsis")
     private String mSynopsis;
     @SerializedName("release_date")
+    @Column(name = "releaseDate", getterName = "getReleaseDate", setterName = "setReleaseDate")
     private String mReleaseDate;
     @SerializedName("vote_average")
+    @Column(name = "voteAverage", getterName = "getVoteAverage", setterName = "setVoteAverage")
     private Double mVoteAverage;
 
     public Movie() {
