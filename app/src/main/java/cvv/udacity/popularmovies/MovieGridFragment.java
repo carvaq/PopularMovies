@@ -159,10 +159,10 @@ public class MovieGridFragment extends Fragment {
         @Override
         public void onNext(MovieFetch movieFetch) {
             mMovieAdapter.setMovies(movieFetch.getMovies());
-            if (mMovieAdapter.getLastSelectedMovie() != -1 && mMovieAdapter.getItemCount() > 0) {
+            if (mMovieAdapter.getLastSelectedMovie() != -1) {
                 mGridLayoutManager.scrollToPosition(mMovieAdapter.getLastSelectedMovie());
                 ((OnItemClickListener<Movie>) getActivity())
-                        .onItemClicked(movieFetch.getMovies().get(mMovieAdapter.getLastSelectedMovie()));
+                        .onItemClicked(mMovieAdapter.getSelectedMovie());
             }
         }
     };
@@ -198,7 +198,7 @@ public class MovieGridFragment extends Fragment {
                 boolean updateDetailsNeeded = mMovieAdapter.removeMovie(movie);
                 if (updateDetailsNeeded) {
                     ((OnItemClickListener<Movie>) getActivity())
-                            .onItemClicked(mMovieAdapter.getSelectedItems());
+                            .onItemClicked(mMovieAdapter.getSelectedMovie());
                 } else if (mMovieAdapter.getItemCount() == 0) {
                     ((OnItemClickListener<Movie>) getActivity())
                             .onItemClicked(null);

@@ -122,7 +122,6 @@ public class DetailFragment extends Fragment {
                     try {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         String url = String.format(ApiService.YOUTUBE_WATCH_URL_WITH_PLACEHOLDERS, item.getKey());
-                        Log.d(TAG, "onItemClicked: " + url);
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e) {

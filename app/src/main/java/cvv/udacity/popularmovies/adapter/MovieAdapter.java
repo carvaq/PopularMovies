@@ -40,8 +40,8 @@ public class MovieAdapter extends BaseAdapter<MovieAdapter.ViewHolder> {
         mOnFavClickListener = onFavClickListener;
     }
 
-    public Movie getSelectedItems() {
-        return mViewItems.get(mLastSelectedMovie).getMovie();
+    public Movie getSelectedMovie() {
+        return getItemCount() > 0 ? mViewItems.get(mLastSelectedMovie).getMovie() : null;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
