@@ -239,7 +239,8 @@ public class MovieGridFragment extends Fragment {
         mShowingDetails = showingDetails;
         if (mMovieAdapter != null) {
             mMovieAdapter.setDetailsShowing(showingDetails);
-            mMovieAdapter.setLastSelectedMovie(showingDetails ? 0 : -1);
+    /*        mMovieAdapter.setLastSelectedMovie(
+                    showingDetails ? mMovieAdapter.getLastSelectedMovie() : -1);*/
         }
     }
 
